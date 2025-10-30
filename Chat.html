@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>🏫 CSSS RUMUOMASI 💬 Chatting Platform ✨</title>
+  <meta name="description" content="CSSS Rumuomasi Chatting Platform — public school chat with voice messages. Created by Sampson Praise." />
+  <meta name="author" content="Sampson Praise" />
+  <meta name="robots" content="index, follow" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --accent1:#00bfff; --accent2:#10b981; --accent3:#f59e0b;
+      font-family:Inter,system-ui,Arial;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;min-height:100vh;background:linear-gradient(135deg,#001f3f 0%,#083344 40%,#0b6623 70%,#ffd60a 100%);color:#fff;font-family:Inter}
+    .app{max-width:1200px;margin:auto;display:grid;grid-template-columns:320px 1fr;gap:18px;padding:18px}
+    header{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;padding:8px 0}
+    .logo{width:56px;height:56px;border-radius:12px;background:rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;color:#021;font-weight:800}
+    .card{background:rgba(255,255,255,0.06);padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,0.04)}
+    .sidebar{display:flex;flex-direction:column;gap:12px;height:calc(100vh - 140px);overflow:auto}
+    input,button,textarea{font-family:inherit;border-radius:10px;border:1px solid rgba(255,255,255,0.06);padding:10px;background:transparent;color:inherit}
+    button{cursor:pointer;background:linear-gradient(90deg,var(--accent1),#7c3aed);border:none;color:#021;font-weight:700}
+    .main{display:flex;flex-direction:column;height:calc(100vh - 140px)}
+    .chat-area{flex:1;display:flex;flex-direction:column;gap:12px;overflow:auto;padding:12px}
+    .composer{display:flex;gap:8px;align-items:center;padding:12px}
+    .msg{padding:10px;border-radius:12px;background:linear-gradient(90deg,rgba(255,255,255,0.03),rgba(255,255,255,0.02));max-width:70%}
+    .msg.you{margin-left:auto;background:linear-gradient(90deg,#dbeafe22,#7dd3fc22)}
+    .msgs{display:flex;flex-direction:column;gap:8px}
+    .user-pill{display:flex;gap:8px;align-items:center;padding:6px;border-radius:10px;background:rgba(255,255,255,0.02)}
+    .small{font-size:12px;color:#dbeafecc}
+    .invite {display:block;margin-top:10px;padding:8px;border-radius:10px;text-align:center;background:rgba(255,255,255,0.04);text-decoration:none;color:inherit}
+    @media (max-width:960px){.app{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div style="display:flex;gap:12px;align-items:center">
+        <div class="logo">CSSS</div>
+        <div>
+          <h1 style="margin:0">🏫 CSSS RUMUOMASI 💬 Chatting Platform ✨</h1>
+          <div class="small">Connecting Bright Minds 💡, One Chat at a Time 💬🔥</div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:12px;align-items:center">
+        <div id="currentUserDisplay" class="small">Not signed in</div>
+        <button id="signOutBtn" style="display:none">Sign out 🚪</button>
+      </div>
+    </header>
+
+    <aside class="sidebar">
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div><strong>About Us 📖</strong></div>
+          <div class="small">Admin: Sampson</div>
+        </div>
+        <div style="margin-top:8px;line-height:1.3;font-size:14px">
+          Welcome to <strong>CSSS RUMUOMASI 💬 Chatting Platform ✨</strong> — the official hub for students to connect, share ideas, make friends, and have fun!<br>
+          Created by <strong>Sampson Praise 💻🔥</strong>.<br><br>
+          💬 Admin Contact: <a href="https://wa.me/2349134660893" target="_blank">+2349134660893</a><br>
+          📧 <a href="mailto:sampsonp370@gmail.com">sampsonp370@gmail.com</a><br>
+          🎵 TikTok: <strong>@praisesampon2011</strong> (Profile: Sampson Praise)<br><br>
+          <strong>Rules 📜</strong><br>
+          ✅ Respect everyone — no insults or hate speech.<br>
+          🚫 No bullying, no spam, no fake news.<br>
+          💬 Keep chats friendly and school-related.<br>
+          🎓 Represent CSSS Rumuomasi with pride and positivity! 💪🏽✨
+        </div>
+      </div>
+
+      <div class="card">
+        <strong>Sign up / Sign in 🔑</strong>
+        <div id="authArea" style="margin-top:8px;display:flex;flex-direction:column;gap:8px">
+          <div id="signupForm">
+            <input id="su_username" placeholder="Choose username (no spaces) ✏️">
+            <input id="su_password" type="password" placeholder="Choose password 🔒">
+            <label class="small">Optional profile picture (square)</label>
+            <input id="su_avatar" type="file" accept="image/*">
+            <div style="display:flex;gap:8px">
+              <button id="btnSignUp">Create account ➕</button>
+              <button id="switchToSignIn" style="background:transparent;border:1px solid rgba(255,255,255,0.06)">Already have one? Sign in</button>
+            </div>
+            <div id="signupMsg" class="small"></div>
+          </div>
+
+          <div id="signinForm" style="display:none">
+            <input id="si_username" placeholder="Username">
+            <input id='si_password' type="password" placeholder="Password">
+            <div style="display:flex;gap:8px">
+              <button id="btnSignIn">Sign in 🔓</button>
+              <button id="switchToSignUp" style="background:transparent;border:1px solid rgba(255,255,255,0.06)">Create new account</button>
+            </div>
+            <div id="signinMsg" class="small"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <strong>Online now 👀</strong>
+        <div id="onlineList" style="margin-top:8px"></div>
+      </div>
+
+      <div class="card">
+        <strong>Quick links</strong>
+        <div style="display:flex;flex-direction:column;gap:6px;margin-top:8px">
+          <a class="invite" href="https://wa.me/?text=🔥 Join me on CSSS RUMUOMASI Chatting Platform! 👉 https://praisesampson804-hue.github.io" target="_blank">📤 Invite via WhatsApp (share link)</a>
+          <a href="https://praisesampson804-hue.github.io" target="_blank">Home 🏠</a>
+          <a href="https://wa.me/2349134660893" target="_blank">Contact Admin 📱</a>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <div class="card" style="display:flex;justify-content:space-between;align-items:center">
+        <div><strong>🌈 Public Chat Room — CSSS RUMUOMASI</strong></div>
+        <div class="small">All messages public • permanent</div>
+      </div>
+
+      <div id="chatArea" class="card chat-area">
+        <div id="messages" class="msgs"></div>
+      </div>
+
+      <div class="card composer">
+        <input id="messageInput" style="flex:1" placeholder="Write something fun & schooly... ✨">
+        <button id="sendBtn">Send 💬</button>
+        <button id="recordBtn">🎤 Record</button>
+        <button id="sendVoiceBtn" style="display:none">Send Voice ▶️</button>
+      </div>
+    </main>
+
+    <footer style="grid-column:1/-1;text-align:center;padding:8px;color:#e6f7ff99">Made with ❤️ by Sampson Praise • CSSS Rumuomasi</footer>
+  </div>
+
+  <!-- Firebase (modular) -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
+    import { getDatabase, ref, push, onChildAdded, onChildRemoved, set, get, update, onValue, limitToLast, query } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-database.js";
+    import { getStorage, ref as sref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-storage.js";
+
+    // ----- YOUR FIREBASE CONFIG (inserted as you provided) -----
+    const firebaseConfig = {
+      apiKey: "AIzaSyAuvaxU-cR2YcLFW1EpeCNPijY0c_D1Nt4",
+      authDomain: "csss-rumuomasi.firebaseapp.com",
+      projectId: "csss-rumuomasi",
+      storageBucket: "csss-rumuomasi.firebasestorage.app",
+      messagingSenderId: "535659643851",
+      appId: "1:535659643851:web:4a3b62186f4438b4bdac4e"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const storage = getStorage(app);
+
+    // short sha256 helper for client-side password hashing
+    async function sha256(str){
+      const buf = new TextEncoder().encode(str);
+      const hashBuf = await crypto.subtle.digest('SHA-256', buf);
+      const hashArr = Array.from(new Uint8Array(hashBuf));
+      return hashArr.map(b => b.toString(16).padStart(2,'0')).join('');
+    }
+
+    // --- refs & state ---
+    const messagesRef = ref(db, 'messages');
+    const usersRef = ref(db, 'users');
+    let currentUser = null;
+    const ADMIN_USERNAME = 'SampsonPraise'; // create this exact username to be admin (no spaces)
+
+    // UI helpers
+    const el = id => document.getElementById(id);
+    const signupForm = el('signupForm'), signinForm = el('signinForm');
+    const btnSignUp = el('btnSignUp'), btnSignIn = el('btnSignIn');
+    const switchToSignIn = el('switchToSignIn'), switchToSignUp = el('switchToSignUp');
+    const signupMsg = el('signupMsg'), signinMsg = el('signinMsg');
+    const currentUserDisplay = el('currentUserDisplay'), signOutBtn = el('signOutBtn');
+    const messagesEl = el('messages'), onlineList = el('onlineList');
+
+    // --- auth-like functions using Realtime DB (demo) ---
+    switchToSignIn.onclick = ()=>{ signupForm.style.display='none'; signinForm.style.display='flex'; }
+    switchToSignUp.onclick = ()=>{ signinForm.style.display='none'; signupForm.style.display='flex'; }
+    btnSignUp.onclick = signUp; btnSignIn.onclick = signIn; signOutBtn.onclick = logout;
+
+    async function signUp(){
+      const username = el('su_username').value.trim();
+      const password = el('su_password').value;
+      const avatarFile = el('su_avatar').files[0];
+      if(!username || username.includes(' ')){ signupMsg.textContent = 'Pick a username without spaces. ✏️'; return; }
+      if(!password || password.length < 4){ signupMsg.textContent = 'Choose a stronger password (min 4 chars). 🔐'; return; }
+      signupMsg.textContent = 'Creating account... ⏳';
+
+      const userSnap = await get(ref(db, `users/${username}`));
+      if(userSnap.exists()){ signupMsg.textContent = 'Username taken — try another. ❌'; return; }
+
+      let avatarURL = null;
+      if(avatarFile){
+        const ext = avatarFile.name.split('.').pop();
+        const path = `avatars/${username}.${ext}`;
+        const storRef = sref(storage, path);
+        await uploadBytes(storRef, avatarFile);
+        avatarURL = await getDownloadURL(storRef);
+      }
+
+      const passHash = await sha256(password);
+      await set(ref(db, `users/${username}`), { username, passwordHash: passHash, avatarURL: avatarURL || null, createdAt: Date.now(), online: true });
+
+      if(username.toLowerCase() === ADMIN_USERNAME.toLowerCase()){
+        await update(ref(db, `users/${username}`), { isAdmin:true });
+      }
+
+      signupMsg.textContent = 'Account created! You are signed in. 🎉';
+      loginLocal({ username, avatarURL, isAdmin: (username.toLowerCase() === ADMIN_USERNAME.toLowerCase()) });
+    }
+
+    async function signIn(){
+      const username = el('si_username').value.trim();
+      const password = el('si_password').value;
+      signinMsg.textContent = 'Checking... ⏳';
+      const userSnap = await get(ref(db, `users/${username}`));
+      if(!userSnap.exists()){ signinMsg.textContent = 'No such username. Try create one. ✨'; return; }
+      const userData = userSnap.val();
+      const hash = await sha256(password);
+      if(hash !== userData.passwordHash){ signinMsg.textContent = 'Wrong password. 🔒'; return; }
+      signinMsg.textContent = 'Signed in! 🎉';
+      loginLocal({ username, avatarURL: userData.avatarURL || null, isAdmin: !!userData.isAdmin });
+    }
+
+    function loginLocal(u){
+      currentUser = u;
+      localStorage.setItem('cuser', JSON.stringify(currentUser));
+      onLogin();
+    }
+    function logout(){
+      if(currentUser) update(ref(db, `users/${currentUser.username}`), { online:false, lastSeen:Date.now() });
+      currentUser=null; localStorage.removeItem('cuser'); onLogout();
+    }
+
+    function setOnline(){ if(!currentUser) return; update(ref(db, `users/${currentUser.username}`), { online:true, lastSeen:Date.now(), avatarURL: currentUser.avatarURL || null }); }
+
+    function onLogin(){
+      el('authArea').style.display='none';
+      currentUserDisplay.textContent = `Signed in as ${currentUser.username} ${currentUser.isAdmin ? '👑' : ''}`;
+      signOutBtn.style.display = 'inline-block';
+      setOnline();
+    }
+    function onLogout(){
+      el('authArea').style.display='flex';
+      currentUserDisplay.textContent = 'Not signed in';
+      signOutBtn.style.display = 'none';
+    }
+
+    // restore from local storage
+    window.addEventListener('load', ()=>{ const saved = localStorage.getItem('cuser'); if(saved){ currentUser = JSON.parse(saved); onLogin(); } });
+
+    // --- messages UI & realtime listeners ---
+    function escapeHtml(s){ if(!s) return ''; return s.replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','\'':'&#39;','"':'&quot;'}[c])); }
+
+    function renderMessage(key, msg){
+      if(document.getElementById('m_'+key)) return;
+      const wrap = document.createElement('div');
+      wrap.id = 'm_' + key;
+      wrap.className = 'msg ' + (currentUser && currentUser.username === msg.username ? 'you' : '');
+      const meta = document.createElement('div'); meta.className='meta';
+      const avatar = document.createElement('div'); avatar.style.width='36px'; avatar.style.height='36px'; avatar.style.borderRadius='8px'; avatar.style.background='#ffffff22'; avatar.style.display='flex'; avatar.style.alignItems='center'; avatar.style.justifyContent='center';
+      avatar.textContent = msg.username ? msg.username.charAt(0).toUpperCase() : '?';
+      if(msg.avatarURL){
+        const im = document.createElement('img'); im.src = msg.avatarURL; im.style.width='36px'; im.style.height='36px'; im.style.borderRadius='8px'; avatar.innerHTML=''; avatar.appendChild(im);
+      }
+      const who = document.createElement('div'); who.innerHTML = `<strong>${escapeHtml(msg.username)}</strong> • <span class="small">${new Date(msg.ts).toLocaleString()}</span>`;
+      meta.appendChild(avatar); meta.appendChild(who);
+
+      const content = document.createElement('div'); content.className='text';
+      if(msg.text) content.innerHTML = escapeHtml(msg.text);
+      if(msg.voiceURL){
+        const audio = document.createElement('audio'); audio.controls=true; audio.src = msg.voiceURL; audio.style.marginTop='6px'; content.appendChild(audio);
+      }
+      wrap.appendChild(meta); wrap.appendChild(content);
+
+      if(currentUser && currentUser.isAdmin){
+        const ctrl=document.createElement('div'); ctrl.style.marginTop='6px';
+        const del=document.createElement('button'); del.style.background='transparent'; del.style.border='1px solid rgba(255,255,255,0.06)'; del.textContent='Delete ❌';
+        del.onclick = ()=>{ if(confirm('Delete message?')) { set(ref(db, `messages/${key}`), null); } };
+        ctrl.appendChild(del); wrap.appendChild(ctrl);
+      }
+
+      messagesEl.appendChild(wrap);
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    }
+
+    const recentQuery = query(messagesRef, limitToLast(500));
+    onChildAdded(recentQuery, snap => { renderMessage(snap.key, snap.val()); });
+    onChildRemoved(messagesRef, snap => { const eln = document.getElementById('m_'+snap.key); if(eln) eln.remove(); });
+
+    // send text message
+    el('sendBtn').onclick = async ()=>{
+      const text = el('messageInput').value.trim();
+      if(!currentUser){ alert('Please sign in to send messages.'); return; }
+      if(!text && !window.pendingVoice) return;
+      const payload = { username: currentUser.username, avatarURL: currentUser.avatarURL || null, ts: Date.now() };
+      if(text) payload.text = text;
+      if(window.pendingVoice){ payload.voiceURL = window.pendingVoice; window.pendingVoice = null; el('sendVoiceBtn').style.display='none'; el('recordBtn').style.display='inline-block'; }
+      const newRef = push(messagesRef); await set(newRef, payload);
+      el('messageInput').value = '';
+    };
+
+    // online users list
+    onValue(usersRef, snap => {
+      const val = snap.val() || {};
+      onlineList.innerHTML = '';
+      Object.values(val).forEach(u => {
+        const item = document.createElement('div'); item.className='user-pill';
+        const av = document.createElement('div'); av.style.width='36px'; av.style.height='36px'; av.style.borderRadius='8px'; av.style.display='flex'; av.style.alignItems='center'; av.style.justifyContent='center'; av.style.background='#ffffff20';
+        av.textContent = (u.avatarURL ? '' : (u.username ? u.username.charAt(0).toUpperCase() : '?'));
+        if(u.avatarURL){ const im = document.createElement('img'); im.src = u.avatarURL; im.style.width='36px'; im.style.height='36px'; im.style.borderRadius='8px'; av.innerHTML=''; av.appendChild(im); }
+        item.appendChild(av);
+        const who = document.createElement('div'); who.innerHTML = `<strong>${escapeHtml(u.username)}</strong><div class="small">${u.online ? 'online' : 'offline'}</div>`;
+        item.appendChild(who);
+        onlineList.appendChild(item);
+      });
+    });
+
+    // avatar change preview
+    el('su_avatar').addEventListener('change', e => { const f = e.target.files[0]; if(!f) return; el('signupMsg').textContent = `Avatar ready: ${f.name}`; });
+
+    // voice recording
+    let recorder, chunks=[];
+    el('recordBtn').addEventListener('click', async ()=>{
+      if(recorder && recorder.state === 'recording'){ recorder.stop(); return; }
+      try{
+        const stream = await navigator.mediaDevices.getUserMedia({ audio:true });
+        recorder = new MediaRecorder(stream);
+        chunks = [];
+        recorder.ondataavailable = e => chunks.push(e.data);
+        recorder.onstop = async ()=>{
+          const blob = new Blob(chunks, { type:'audio/webm' });
+          if(!currentUser){ alert('Sign in to send voice messages.'); return; }
+          const path = `voices/${currentUser.username}_${Date.now()}.webm`;
+          const storRef = sref(storage, path);
+          await uploadBytes(storRef, blob);
+          const url = await getDownloadURL(storRef);
+          window.pendingVoice = url;
+          el('sendVoiceBtn').style.display = 'inline-block';
+          el('recordBtn').style.display = 'none';
+          el('sendVoiceBtn').onclick = async ()=>{
+            const payload = { username: currentUser.username, avatarURL: currentUser.avatarURL || null, ts: Date.now(), voiceURL: url };
+            const newRef = push(messagesRef); await set(newRef, payload);
+            window.pendingVoice = null;
+            el('sendVoiceBtn').style.display = 'none'; el('recordBtn').style.display = 'inline-block';
+          };
+        };
+        recorder.start();
+        alert('Recording... Click Record again to stop. 🎤');
+      }catch(err){
+        alert('Microphone permission denied or not available. Check browser settings.');
+      }
+    });
+  </script>
+
+  <!-- Notes: keep realtime DB and storage permissive for testing -->
+  <!-- { "rules": { ".read": true, ".write": true } } -->
+</body>
+  </html>
